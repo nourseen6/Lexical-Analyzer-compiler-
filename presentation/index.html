@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lexical Analyzer Project Presentation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide cover active" data-title="Cover">
+      <div class="cover-grid">
+        <div>
+          <p class="kicker">Compiler Design Project</p>
+          <h1>Lexical Analyzer</h1>
+          <p class="subtitle">A C++ based lexer with a simple web interface for tokenizing source code.</p>
+        </div>
+        <div class="cover-card">
+          <p><span>Student</span><strong>Nourseen Tarek</strong></p>
+          <p><span>Course</span><strong>Compiler Design</strong></p>
+          <p><span>Project</span><strong>Lexical Analysis Tool</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Introduction">
+      <p class="kicker">Introduction to Compiler Design</p>
+      <h2>Compilers translate high-level programs into executable form.</h2>
+      <div class="two-column">
+        <div>
+          <p>A compiler reads source code, checks its structure and meaning, then produces target code that a machine or runtime can execute.</p>
+          <p>This project focuses on the first major stage: lexical analysis.</p>
+        </div>
+        <ul class="check-list">
+          <li>Reads the raw program text.</li>
+          <li>Breaks text into meaningful symbols.</li>
+          <li>Prepares clean input for later compiler phases.</li>
+          <li>Reports unknown characters when input is not recognized.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Lexical Analysis">
+      <p class="kicker">What is Lexical Analysis?</p>
+      <h2>Lexical analysis converts characters into tokens.</h2>
+      <div class="callout-row">
+        <article>
+          <span class="badge">Input</span>
+          <code>x = 5 + 10;</code>
+        </article>
+        <article>
+          <span class="badge">Process</span>
+          <p>Scan the input from left to right and group characters by rules.</p>
+        </article>
+        <article>
+          <span class="badge">Output</span>
+          <p>A sequence of categorized tokens such as identifiers, operators, numbers, and special characters.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Lexer Role">
+      <p class="kicker">Role of the Lexer in Compiler Phases</p>
+      <h2>The lexer is the compiler's first filter.</h2>
+      <div class="pipeline">
+        <div><strong>Source Code</strong><span>Raw characters</span></div>
+        <div><strong>Lexical Analyzer</strong><span>Tokens</span></div>
+        <div><strong>Parser</strong><span>Syntax tree</span></div>
+        <div><strong>Semantic Analysis</strong><span>Meaning checks</span></div>
+        <div><strong>Code Generation</strong><span>Target code</span></div>
+      </div>
+      <p class="note">In this project, the lexer sends token data as JSON so the web page can display results in a table.</p>
+    </section>
+
+    <section class="slide" data-title="Tokens">
+      <p class="kicker">Tokens, Lexemes, and Patterns</p>
+      <h2>Each token connects a piece of text to a category.</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Term</th>
+            <th>Meaning</th>
+            <th>Project Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Lexeme</td>
+            <td>The actual text found in the source code.</td>
+            <td><code>while</code>, <code>x</code>, <code>10</code></td>
+          </tr>
+          <tr>
+            <td>Token</td>
+            <td>The category assigned to a lexeme.</td>
+            <td><code>KEYWORD</code>, <code>IDENTIFIER</code></td>
+          </tr>
+          <tr>
+            <td>Pattern</td>
+            <td>The rule used to recognize a lexeme.</td>
+            <td>Letters form identifiers, digits form numbers.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="slide" data-title="Workflow">
+      <p class="kicker">Project Workflow</p>
+      <h2>The project connects a web interface to a C++ lexer server.</h2>
+      <div class="workflow">
+        <div><span>1</span><p>User enters code in the browser.</p></div>
+        <div><span>2</span><p>JavaScript sends a POST request to <code>/analyze</code>.</p></div>
+        <div><span>3</span><p>The C++ backend extracts the code field.</p></div>
+        <div><span>4</span><p>The lexer scans the input and builds token objects.</p></div>
+        <div><span>5</span><p>The browser displays lexemes and token categories.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Examples">
+      <p class="kicker">Input &amp; Output Examples</p>
+      <h2>The analyzer turns code into a token table.</h2>
+      <div class="example-grid">
+        <div class="code-panel">
+          <h3>Input</h3>
+          <pre><code>x = 5 + 10;
+if (x &gt;= 10) {
+  return x;
+}</code></pre>
+        </div>
+        <div class="table-panel">
+          <h3>Output</h3>
+          <table>
+            <tbody>
+              <tr><td><code>x</code></td><td>IDENTIFIER</td></tr>
+              <tr><td><code>=</code></td><td>OPERATOR</td></tr>
+              <tr><td><code>5</code></td><td>NUMERIC_CONSTANT</td></tr>
+              <tr><td><code>if</code></td><td>KEYWORD</td></tr>
+              <tr><td><code>&gt;=</code></td><td>OPERATOR</td></tr>
+              <tr><td><code>{</code></td><td>SPECIAL_CHAR</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Implementation">
+      <p class="kicker">Implementation Details</p>
+      <h2>The lexer uses direct scanning and helper functions.</h2>
+      <div class="feature-grid">
+        <article>
+          <h3>Identifier Handling</h3>
+          <p>Reads letters, digits, and underscores. Then checks if the lexeme is a keyword.</p>
+        </article>
+        <article>
+          <h3>Number Handling</h3>
+          <p>Recognizes integers, decimal numbers, and exponent-style numeric constants.</p>
+        </article>
+        <article>
+          <h3>Operator Handling</h3>
+          <p>Supports single operators and combined operators like <code>&gt;=</code>, <code>==</code>, and <code>&lt;&lt;</code>.</p>
+        </article>
+        <article>
+          <h3>JSON Response</h3>
+          <p>Returns token objects with <code>lexeme</code> and <code>type</code> fields for the frontend table.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Language">
+      <p class="kicker">Programming Language Used</p>
+      <h2>The core lexer is implemented in C++.</h2>
+      <div class="two-column">
+        <div>
+          <p>C++ was used for the backend tokenizer because it gives direct control over character scanning, string handling, and token creation.</p>
+          <p>The frontend uses HTML, CSS, and JavaScript to provide an interactive interface.</p>
+        </div>
+        <div class="stack-list">
+          <p><strong>C++</strong><span>Lexer logic and HTTP server</span></p>
+          <p><strong>cpp-httplib</strong><span>Local backend endpoint</span></p>
+          <p><strong>HTML/CSS</strong><span>User interface layout and styling</span></p>
+          <p><strong>JavaScript</strong><span>Request handling and table rendering</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Results">
+      <p class="kicker">Results</p>
+      <h2>The project successfully identifies common lexical categories.</h2>
+      <div class="results">
+        <div><strong>KEYWORD</strong><span>if, else, while, return, int</span></div>
+        <div><strong>IDENTIFIER</strong><span>variable and function-like names</span></div>
+        <div><strong>NUMERIC_CONSTANT</strong><span>integer, decimal, and exponent numbers</span></div>
+        <div><strong>OPERATOR</strong><span>=, +, -, *, /, &gt;=, ==</span></div>
+        <div><strong>SPECIAL_CHAR</strong><span>brackets, commas, semicolons, colons</span></div>
+        <div><strong>UNKNOWN</strong><span>characters outside the lexer rules</span></div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Conclusion">
+      <p class="kicker">Conclusion</p>
+      <h2>This project demonstrates the first stage of compiler design.</h2>
+      <div class="conclusion">
+        <p>The lexical analyzer scans source code, separates it into lexemes, classifies each lexeme into a token type, and presents the results through a simple frontend.</p>
+        <p>By combining C++ backend logic with a browser interface, the project makes compiler concepts visible and easier to test.</p>
+      </div>
+    </section>
+  </main>
+
+  <nav class="controls" aria-label="Presentation controls">
+    <button id="prevBtn" type="button" aria-label="Previous slide">Prev</button>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+    <span id="slideCounter">1 / 11</span>
+    <button id="nextBtn" type="button" aria-label="Next slide">Next</button>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>
